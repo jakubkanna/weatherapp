@@ -12,9 +12,6 @@ const data = {
       }
       const data = await response.json();
 
-      //filter data for needed only
-      //
-
       // Save data to localStorage
       localStorage.setItem("weatherForecast", JSON.stringify(data));
 
@@ -40,8 +37,6 @@ const dom = {
       controller.formHandler(cityName);
     });
   },
-
-  //create new dom elements
 };
 
 const controller = {
@@ -50,7 +45,6 @@ const controller = {
     dom.handleForm();
     // Check if there's data in localStorage when the page loads
     const storedForecastData = localStorage.getItem("weatherForecast");
-
     if (storedForecastData) {
       const parsedData = JSON.parse(storedForecastData);
       this.displayForecast(parsedData);
@@ -60,6 +54,7 @@ const controller = {
     const domGenerator = new DOMGenerator(data);
     const generatedDOM = domGenerator.generateDOM();
     const main = document.body.querySelector("main");
+    main.innerHTML = ""; // Clear existing content
     main.appendChild(generatedDOM);
   },
   formHandler(cityName) {
