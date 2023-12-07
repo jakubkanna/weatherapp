@@ -1,6 +1,6 @@
 # Weather App
 
-**Note:** Yes you don't see a stylesheet for a reason! The goal is to create good design and the app using only default user agent stylesheet.
+**Note:** Yes you don't see a fancy stylesheet for a reason! The goal is to create good design and the app using only default user agent stylesheet.
 
 ## The Odin Project
 
