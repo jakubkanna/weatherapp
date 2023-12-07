@@ -33,4 +33,4 @@
 
 #Todo
 
-Add toggle buttons: C/F, Simplified/Detailed
+Add toggle buttons: C/F, Simplified/Detailed, add gif which describes the weather
