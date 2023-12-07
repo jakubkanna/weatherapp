@@ -34,3 +34,10 @@
 #Todo
 
 Add toggle buttons: C/F, Simplified/Detailed, add gif which describes the weather
+
+
+hide _c if F is choosen and vice versa.
+
+hide everything except selected when simplified is choosen.
+
+Fetch gif using data.conditions.text and display it.
