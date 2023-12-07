@@ -24,23 +24,24 @@ const data = {
       return data; //to controller
     } catch (error) {
       console.error("Caught error during forecast fetch:", error);
+      throw error;
     }
   },
 };
 const dom = {
   //handle events
-  handleForm() {
-    const form = document.getElementById("cityName");
 
-    form.addEventListener("submit", (event) => {
-      console.log("hym2");
+  handleForm(handler) {
+    // Form
+    const form = document.getElementById("city");
 
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const input = document.getElementById("_location");
       const cityName = input.value.toString();
 
       // pass to controller
-      controller.formHandler(cityName);
+      await handler(cityName);
     });
   },
 
@@ -48,8 +49,10 @@ const dom = {
 };
 
 const controller = {
-  init() {
-    dom.handleForm();
+  async init() {
+    //bind
+    await handleForm(this.formHandler);
+    //refresh display
   },
   display(data) {
     console.log(data);
