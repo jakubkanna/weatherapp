@@ -30,3 +30,7 @@
 ### Mobile Design
 
 [Add Mobile Design Image/Link Here]
+
+#Todo
+
+Add toggle buttons: C/F, Simplified/Detailed
