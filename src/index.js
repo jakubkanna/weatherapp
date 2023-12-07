@@ -80,7 +80,7 @@ class DOMGenerator {
   }
 
   // Inserts a header element into the parent with the specified key and level
-  insertHeaders(parent, key, level) {
+  insertHeader(parent, key, level) {
     const header = document.createElement(`h${level}`);
     header.textContent = key.charAt(0).toUpperCase() + key.slice(1);
     parent.appendChild(header);
@@ -123,14 +123,10 @@ class DOMGenerator {
 
   // Generates the entire DOM structure based on the provided data
   generateDOM() {
-    // Create the root element for the DOM structure
     const rootElement = this.createDivElement("root");
-
-    // Iterate through the provided data and create elements accordingly
     for (const key in this.data) {
       this.createElement(rootElement, key, this.data[key]);
     }
-
     return rootElement;
   }
 
@@ -140,9 +136,8 @@ class DOMGenerator {
     const element = this.createDivElement(key);
 
     // Insert headers based on the key and level
-    this.insertHeaders(element, key, level);
+    this.insertHeader(element, key, level);
 
-    // Check if the value is an object (nested structure) or not
     if (typeof value === "object") {
       // If it's an object, create nested elements
       this.createNestedElements(element, value, level + 1);
