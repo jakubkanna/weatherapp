@@ -13,11 +13,14 @@ const data = {
       }
       const data = await response.json();
 
-      // Save data to localStorage
-      localStorage.setItem("weatherForecast", JSON.stringify(data));
+      // Modify data - not finished
+      const newData = modifyForecastData(data);
 
-      // pass to controller
-      controller.displayForecast(data);
+      // Save modified data to localStorage
+      localStorage.setItem("weatherForecast", JSON.stringify(newData));
+
+      // Pass modified data to controller
+      controller.displayForecast(newData);
     } catch (error) {
       console.error("Caught error during forecast fetch:", error);
     }
@@ -84,6 +87,8 @@ class BasicToggler {
     this.visibleElements = document.querySelectorAll(visibleSelector);
     this.hiddenSelector = hiddenSelector; // Save the original hidden selector
 
+    this.toggle(); //simplify by default
+
     this.button.addEventListener("click", () => this.toggle());
 
     // Use a more efficient method to initially hide elements
@@ -128,6 +133,7 @@ class DataToggler {
     this.button = document.getElementById(buttonID);
     this.rootElements = document.querySelectorAll(rootSelector);
     this.addImmunity();
+    this.toggle(); //simplify by default
     this.button.addEventListener("click", () => this.toggle());
   }
 
@@ -151,14 +157,24 @@ class DataToggler {
   }
 }
 
-// Usage
-// Array of day names
-const daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+//not finished
+function modifyForecastData(data) {
+  let newData = data;
+  const days = newData.forecast.forecastday;
+
+  days.forEach((element) => {
+    // Get epoch
+    let epoch = element.date_epoch;
+
+    // Create a Date object from epoch
+    const date = new Date(epoch * 1000); // Multiply by 1000 to convert seconds to milliseconds
+
+    // Get day name
+    const dayName = date.toLocaleDateString("en-US", { weekday: "long" });
+
+    // Log or do something with the day name
+    epoch = dayName;
+  });
+
+  return newData;
+}

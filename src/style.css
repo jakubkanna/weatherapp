@@ -82,10 +82,28 @@ header {
   position: fixed;
   bottom: 0;
   right: 0;
-  /* transform: translateX(50%); */
   padding: 12px;
   align-items: center;
   z-index: 2;
+}
+header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 2;
+}
+h3,
+h4,
+h5,
+h6,
+h7,
+h8,
+h9 {
+  font-family: monospace;
 }
 #root {
   width: 100%;
@@ -107,14 +125,11 @@ header {
 }
 #forecast {
   width: 100%;
-  overflow: hidden;
 }
 #forecastday {
   width: 100%;
-
   display: grid;
   grid-template-columns: repeat(auto-fit, 1fr);
-  overflow: hidden;
 }
 #forecastday > *:first-child {
   grid-column-start: 1;
@@ -134,4 +149,8 @@ header {
 }
 [id*="_f"] span::after {
   content: "°F";
+}
+
+#forecastday > h3 {
+  content: "zzz";
 }
