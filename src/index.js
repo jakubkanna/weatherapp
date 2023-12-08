@@ -1,4 +1,5 @@
 import "./style.css";
+import HomeGen from "./index_modules/dom/home-generator";
 
 const data = {
   async getForecast(cityName) {
@@ -37,12 +38,17 @@ const dom = {
       controller.formHandler(cityName);
     });
   },
+  handleMenuButtons() {
+    // Create button to toggle visibility of [id^="_c"] and [id*="_f"]
+    new BasicToggler("tempToggler", '[id*="_c"]', '[id*="_f"]');
+  },
 };
 
 const controller = {
   init() {
     //handle
     dom.handleForm();
+
     // Check if there's data in localStorage when the page loads
     const storedForecastData = localStorage.getItem("weatherForecast");
     if (storedForecastData) {
@@ -50,13 +56,17 @@ const controller = {
       this.displayForecast(parsedData);
     }
   },
+
   displayForecast(data) {
-    const domGenerator = new DOMGenerator(data);
-    const generatedDOM = domGenerator.generateDOM();
+    const generatedDOM = new HomeGen(data).generateDOM();
+
     const main = document.body.querySelector("main");
     main.innerHTML = ""; // Clear existing content
     main.appendChild(generatedDOM);
+
+    dom.handleMenuButtons(); //do it after new dom is loaded
   },
+
   formHandler(cityName) {
     data.getForecast(cityName);
   },
@@ -67,87 +77,47 @@ document.addEventListener("DOMContentLoaded", () => {
   controller.init();
 });
 
-class DOMGenerator {
-  constructor(data) {
-    this.data = data;
+class BasicToggler {
+  constructor(buttonID, visibleSelector, hiddenSelector) {
+    this.button = document.getElementById(buttonID);
+    this.visibleElements = document.querySelectorAll(visibleSelector);
+    this.hiddenElements = document.querySelectorAll(hiddenSelector);
+
+    this.button.addEventListener("click", () => this.toggle());
+
+    // Hide elements to be hidden by default
+    this.hiddenElements.forEach((element) => {
+      element.classList.add("hidden");
+    });
   }
 
-  // Creates and returns a div element with a given key as its id
-  createDivElement(key) {
-    const element = document.createElement("div");
-    element.id = key;
-    return element;
-  }
+  toggle() {
+    // Check if the first visible element is currently visible
+    const isVisible = !this.visibleElements[0].classList.contains("hidden");
 
-  // Inserts a header element into the parent with the specified key and level
-  insertHeader(parent, key, level) {
-    const header = document.createElement(`h${level}`);
-    header.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-    parent.appendChild(header);
-  }
+    // Toggle visibility for elements to be shown based on the current state
+    this.visibleElements.forEach((element) =>
+      element.classList.toggle("hidden", isVisible)
+    );
 
-  // Creates nested elements for an object and appends them to the parent
-  createNestedElements(parent, nestedData, level) {
-    for (const nestedKey in nestedData) {
-      this.createElement(parent, nestedKey, nestedData[nestedKey], level);
-    }
-  }
-
-  // Creates a leaf element (either an image or a span) and appends it to the parent
-  createLeafElement(parent, value) {
-    if (this.isImageURL(value)) {
-      this.createImageElement(parent, value);
-    } else {
-      this.createSpanElement(parent, value);
-    }
-  }
-
-  // Creates an image element with the specified source and appends it to the parent
-  createImageElement(parent, src) {
-    const img = document.createElement("img");
-    img.src = src;
-    parent.appendChild(img);
-  }
-
-  // Creates a span element with the specified text content and appends it to the parent
-  createSpanElement(parent, text) {
-    const span = document.createElement("span");
-    span.textContent = text;
-    parent.appendChild(span);
-  }
-
-  // Checks if the given URL is an image URL based on its extension
-  isImageURL(url) {
-    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
-  }
-
-  // Generates the entire DOM structure based on the provided data
-  generateDOM() {
-    const rootElement = this.createDivElement("root");
-    for (const key in this.data) {
-      this.createElement(rootElement, key, this.data[key]);
-    }
-    return rootElement;
-  }
-
-  // Main function to create an element and its children recursively
-  createElement(parent, key, value, level = 2) {
-    // Create a div element for the current key
-    const element = this.createDivElement(key);
-
-    // Insert headers based on the key and level
-    this.insertHeader(element, key, level);
-
-    if (typeof value === "object") {
-      // If it's an object, create nested elements
-      this.createNestedElements(element, value, level + 1);
-    } else {
-      // If it's not an object, create a leaf element
-      this.createLeafElement(element, value);
-    }
-
-    // Append the created element to the parent
-    parent.appendChild(element);
+    // Toggle visibility for elements to be hidden based on the opposite state
+    this.hiddenElements.forEach((element) =>
+      element.classList.toggle("hidden", !isVisible)
+    );
   }
 }
-
+/**
+"#location h2",
+"#name",
+"#country",
+"#localtime",
+"#current h2",
+'[id*="temp"]',
+"#condition",
+"#forecast h2",
+"#forecast h4",
+"#date",
+"#sunrise",
+"#moonset",
+"#moon_phase",
+ */
