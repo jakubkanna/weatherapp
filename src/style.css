@@ -128,3 +128,10 @@ header {
 .hidden {
   display: none !important;
 }
+/* display units */
+[id*="_c"] span::after {
+  content: "°C";
+}
+[id*="_f"] span::after {
+  content: "°F";
+}

@@ -41,6 +41,7 @@ const dom = {
   handleMenuButtons() {
     // Create button to toggle visibility of [id^="_c"] and [id*="_f"]
     new BasicToggler("tempToggler", '[id*="_c"]', '[id*="_f"]');
+    new DataToggler("detailToggler", "#root *");
   },
 };
 
@@ -81,43 +82,83 @@ class BasicToggler {
   constructor(buttonID, visibleSelector, hiddenSelector) {
     this.button = document.getElementById(buttonID);
     this.visibleElements = document.querySelectorAll(visibleSelector);
-    this.hiddenElements = document.querySelectorAll(hiddenSelector);
+    this.hiddenSelector = hiddenSelector; // Save the original hidden selector
 
     this.button.addEventListener("click", () => this.toggle());
 
-    // Hide elements to be hidden by default
-    this.hiddenElements.forEach((element) => {
+    // Use a more efficient method to initially hide elements
+    document.querySelectorAll(hiddenSelector).forEach((element) => {
       element.classList.add("hidden");
     });
   }
 
   toggle() {
-    // Check if the first visible element is currently visible
     const isVisible = !this.visibleElements[0].classList.contains("hidden");
 
-    // Toggle visibility for elements to be shown based on the current state
     this.visibleElements.forEach((element) =>
       element.classList.toggle("hidden", isVisible)
     );
 
-    // Toggle visibility for elements to be hidden based on the opposite state
-    this.hiddenElements.forEach((element) =>
-      element.classList.toggle("hidden", !isVisible)
-    );
+    // Use the original hidden selector to toggle only non-immune elements
+    document.querySelectorAll(this.hiddenSelector).forEach((element) => {
+      element.classList.toggle("hidden", !isVisible);
+    });
   }
 }
-/**
-"#location h2",
-"#name",
-"#country",
-"#localtime",
-"#current h2",
-'[id*="temp"]',
-"#condition",
-"#forecast h2",
-"#forecast h4",
-"#date",
-"#sunrise",
-"#moonset",
-"#moon_phase",
- */
+
+class DataToggler {
+  static exceptions = [
+    "#location, #location > h2",
+    "#name, #name >*",
+    "#country, #country > *",
+    "#localtime, #localtime > *",
+    "#current, #current > h2",
+    '[id*="temp"]:not([id*="temp_f"]), [id*="temp"] > *',
+    "#condition, #condition :not(h4,h7,#code)",
+    "#forecast, #forecast h2, #forecast h4, #forecast > *, #forecastday > *",
+    "#date, #date *",
+    "#sunrise, #sunrise *",
+    "#day",
+    "#astro, #moonset, #moonset *",
+    "#moon_phase, #moon_phase *",
+    ".immune",
+  ];
+
+  constructor(buttonID, rootSelector) {
+    this.button = document.getElementById(buttonID);
+    this.rootElements = document.querySelectorAll(rootSelector);
+    this.addImmunity();
+    this.button.addEventListener("click", () => this.toggle());
+  }
+
+  addImmunity() {
+    const combinedSelectors = DataToggler.exceptions.join(", ");
+    const exceptionsEl = document.querySelectorAll(combinedSelectors);
+
+    exceptionsEl.forEach((element) => {
+      element.classList.add("immune");
+    });
+  }
+
+  toggle() {
+    this.rootElements.forEach((element) => {
+      const isImmune = element.classList.contains("immune");
+
+      if (!isImmune) {
+        element.classList.toggle("hidden");
+      }
+    });
+  }
+}
+
+// Usage
+// Array of day names
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
