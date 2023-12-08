@@ -1,6 +1,12 @@
 # Weather App
 
-**Note:** Yes you don't see a fancy stylesheet for a reason! The goal is to create good design and the app using only default user agent stylesheet.
+**Note:** Main index.js is divided into data, dom and controller objects. 
+
+- Controller binds others together, so data is separated from dom.
+- Data object fetches weather from external server.
+- DOM creates elements and handles events
+
+Script contains generator which generates and nests divs, based on retrived data.
 
 ## The Odin Project
 
@@ -33,15 +39,7 @@
 
 
 
-
-```
-TODO
-
-Add toggle buttons: C/F, Simplified/Detailed, add gif which describes the weather
-
-hide _c if F is choosen and vice versa.
-
-hide everything except selected when simplified is choosen.
-
-Fetch gif using data.conditions.text and display it.
-```
+# TODO
+- Data needs to be modified before generating dom, so it's easier to read. ```modifyForecastData()```
+- Hourly/Daily data display switch could be introduced in the future.
+- Basing on current day conditions page should change a look e.g. fetch gif from giphy using the conditions text from weather data.
