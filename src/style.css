@@ -108,37 +108,36 @@ h9 {
 #root {
   width: 100%;
 }
-/* direct root childrens */
-#root > * {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
-}
-/* first child of #root direct childs direct children */
-#root > * > *:first-child {
-  width: 100%;
-  display: block;
-}
-#root * {
-  padding: 6px;
-}
-#forecast {
-  width: 100%;
-}
-#forecastday {
-  width: 100%;
+/* layout */
+#root {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 1fr);
+  gap: 12px;
 }
-#forecastday > *:first-child {
-  grid-column-start: 1;
-  grid-column-end: 8;
+#current,
+#location {
+  display: grid;
+  height: auto;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
 }
 
-.shown {
-  display: block;
+#forecastday {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
+#forecastday > * {
+  display: grid;
+  gap: 12px;
+}
+#forecastday > * > * > * {
+  padding: 3px;
+}
+#root > * > *:first-child,
+#forecastday {
+  grid-column: 1 / -1; /* Span from the first column to the last column */
+}
+/* outher */
 
 .hidden {
   display: none !important;
@@ -151,6 +150,9 @@ h9 {
   content: "°F";
 }
 
-#forecastday > h3 {
-  content: "zzz";
+/*  */
+
+#date {
+  font-style: italic;
+  font-size: 9px;
 }
