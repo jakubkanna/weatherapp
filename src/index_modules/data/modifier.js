@@ -1,11 +1,11 @@
-export default function modifyForecastData(data, fetcher) {
+export default async function modifyForecastData(data, fetcher) {
   let newData = { ...data }; // Create a shallow copy of the data to avoid modifying the original
   const days = newData.forecast.forecastday;
 
   const conditions = findAllConditions(newData);
 
   modifyEpoch(days);
-  modifyImage(conditions, fetcher);
+ await modifyImage(conditions, fetcher);
 
   return newData;
 }
