@@ -21,6 +21,9 @@ const data = {
 
       // Display actual data
       controller.displayForecast(newWeatherData);
+
+      // Save data to localStorage
+      localStorage.setItem("newWeatherData", JSON.stringify(newWeatherData));
     } catch (error) {
       console.error(error);
     }
@@ -52,6 +55,12 @@ const controller = {
   init() {
     //handle
     dom.handleForm();
+    // Check if there's data in localStorage when the page loads
+    const storedForecastData = localStorage.getItem("newWeatherData");
+    if (storedForecastData) {
+      const parsedData = JSON.parse(storedForecastData);
+      this.displayForecast(parsedData);
+    }
   },
 
   displayForecast(data) {

@@ -6,6 +6,7 @@ export default class DataFetcher {
         throw new Error("Network response was not OK");
       }
       const data = await response.json();
+
       return data;
     } catch (error) {
       console.error("Caught error during forecast fetch:", error);
