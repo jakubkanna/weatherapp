@@ -5,8 +5,9 @@ export default async function modifyForecastData(data, fetcher) {
   const conditions = findAllConditions(newData);
 
   modifyEpoch(days);
- await modifyImage(conditions, fetcher);
+  await modifyImage(conditions, fetcher);
 
+  console.log("modifyForecastData done");
   return newData;
 }
 
@@ -26,18 +27,17 @@ function modifyEpoch(days) {
   });
 }
 
-function modifyImage(conditions, fetcher) {
-  //for each condition in condiitons
-  conditions.forEach(async (condition) => {
-    //fetch giph using it's text and replace link inside icon: with giphy link
+async function modifyImage(conditions, fetcher) {
+  for (const condition of conditions) {
     const query = condition.text;
     const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query} weather'`;
 
     const giphyData = await fetcher.getData(url);
-    const giphyURL = giphyData.data.url;
 
+    const giphyURL = giphyData.data.images.fixed_width.url;
     condition.icon = giphyURL;
-  });
+  }
+  console.log("modifyImage done");
 }
 
 function findAllConditions(obj) {

@@ -1,7 +1,6 @@
 export default class HomeGen {
   constructor(data) {
     this.data = data;
-    console.log(this.data); //PROBLEM logs correct data
   }
 
   // Creates and returns a div element with a given key as its id
@@ -50,7 +49,7 @@ export default class HomeGen {
 
   // Checks if the given URL is an image URL based on its extension
   isImageURL(url) {
-    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(url);
+    return /\.(gif|jpe?g|tiff?|png|webp|bmp)(\?.*)?$/i.test(url);
   }
 
   // Generates the entire DOM structure based on the provided data
@@ -59,7 +58,8 @@ export default class HomeGen {
     for (const key in this.data) {
       this.createElement(rootElement, key, this.data[key]);
     }
-    return rootElement; //PROBLEM returns data with old links
+    console.log("generateDOM done");
+    return rootElement;
   }
 
   // Main function to create an element and its children recursively

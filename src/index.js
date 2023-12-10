@@ -9,11 +9,21 @@ const data = {
   async getForecast(cityName) {
     const url = `https://api.weatherapi.com/v1/forecast.json?key=0c74e0d9f7ae4709b0f121149230512&q=${cityName}&days=7`;
 
-    const weatherData = await this.fetcher.getData(url);
+    // Display loading state
+    controller.displayLoading();
 
-    const newWeatherData = await modifyForecastData(weatherData, this.fetcher);
+    try {
+      const weatherData = await this.fetcher.getData(url);
+      const newWeatherData = await modifyForecastData(
+        weatherData,
+        this.fetcher
+      );
 
-    controller.displayForecast(newWeatherData);
+      // Display actual data
+      controller.displayForecast(newWeatherData);
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
 
@@ -56,6 +66,10 @@ const controller = {
 
   formHandler(cityName) {
     data.getForecast(cityName);
+  },
+  displayLoading() {
+    // Update your UI to display a loading state, e.g., show a spinner or a message
+    console.log("Loading...");
   },
 };
 

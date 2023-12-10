@@ -1,6 +1,6 @@
 # Weather App
 
-**Note:** Main index.js is divided into data, dom and controller objects. 
+**Note:** Main index.js is divided into data, dom and controller objects.
 
 - Controller binds others together, so data is separated from dom.
 - Data object fetches weather from external server.
@@ -37,9 +37,7 @@ Script contains generator which generates and nests divs, based on retrived data
 
 [Add Mobile Design Image/Link Here]
 
-
-
 # TODO
-- Data needs to be modified before generating dom, so it's easier to read. ```modifyForecastData()```
+
+- Placeholders while fetching
 - Hourly/Daily data display switch could be introduced in the future.
-- Basing on current day conditions page should change a look e.g. fetch gif from giphy using the conditions text from weather data.
