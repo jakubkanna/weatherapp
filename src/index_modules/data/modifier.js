@@ -34,7 +34,7 @@ async function modifyImage(conditions, fetcher) {
 
     const giphyData = await fetcher.getData(url);
 
-    const giphyURL = giphyData.data.images.fixed_width.url;
+    const giphyURL = giphyData.data.images.fixed_height.url;
     condition.icon = giphyURL;
   }
   console.log("modifyImage done");
