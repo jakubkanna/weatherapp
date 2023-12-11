@@ -1,4 +1,4 @@
-export default class HomeGen {
+export class HomeGen {
   constructor(data) {
     this.data = data;
   }
@@ -80,5 +80,11 @@ export default class HomeGen {
 
     // Append the created element to the parent
     parent.appendChild(element);
+  }
+}
+
+export class GifGen extends HomeGen {
+  constructor(data) {
+    this.data = data;
   }
 }

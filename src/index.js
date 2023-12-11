@@ -1,5 +1,5 @@
 import "./style.css";
-import HomeGen from "./index_modules/dom/home-generator";
+import { HomeGen, GifGen } from "./index_modules/dom/home-generator";
 import { DataToggler, BasicToggler } from "./index_modules/dom/togglers";
 import DataFetcher from "./index_modules/data/fetcher.js";
 import modifyForecastData from "./index_modules/data/modifier.js";
@@ -14,16 +14,23 @@ const data = {
 
     try {
       const weatherData = await this.fetcher.getData(url);
-      const newWeatherData = await modifyForecastData(
-        weatherData,
-        this.fetcher
-      );
-
-      // Display actual data
-      controller.displayForecast(newWeatherData);
+      const newWeatherData = modifyForecastData(weatherData);
 
       // Save data to localStorage
       localStorage.setItem("newWeatherData", JSON.stringify(newWeatherData));
+
+      return newWeatherData;
+    } catch (error) {
+      console.error(error);
+    }
+  },
+  async getGif(query) {
+    const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query} weather'`;
+    try {
+      const giphyData = await this.fetcher.getData(url);
+      const giphyURL = giphyData.data.images.fixed_height.url;
+
+      return giphyURL;
     } catch (error) {
       console.error(error);
     }
@@ -49,6 +56,14 @@ const dom = {
     new BasicToggler("tempToggler", '[id*="_c"]', '[id*="_f"]');
     new DataToggler("detailToggler", "#root *");
   },
+  get conditionEls() {
+    return document.querySelectorAll("#condition");
+  },
+  appendDOM(generatedDOM) {
+    const main = document.body.querySelector("main");
+    main.innerHTML = ""; // Clear existing content
+    main.appendChild(generatedDOM);
+  },
 };
 
 const controller = {
@@ -60,21 +75,45 @@ const controller = {
     if (storedForecastData) {
       const parsedData = JSON.parse(storedForecastData);
       this.displayForecast(parsedData);
+      this.displayGifs();
     }
   },
 
   displayForecast(data) {
     const generatedDOM = new HomeGen(data).generateDOM();
 
-    const main = document.body.querySelector("main");
-    main.innerHTML = ""; // Clear existing content
-    main.appendChild(generatedDOM);
+    dom.appendDOM(generatedDOM);
 
     dom.handleMenuButtons(); //do it after new dom is loaded
   },
+  displayGifs() {
+    dom.conditionEls.forEach(async (element) => {
+      const text = element.querySelector("#text").innerHTML.toString();
+      const icon = element.querySelector("#icon");
+      const placeholder = element.querySelector("#placeholder");
 
-  formHandler(cityName) {
-    data.getForecast(cityName);
+      const gif = await data.getGif(`${text} weather`);
+
+      function createIcon(gif) {
+        const img = document.createElement("img");
+        img.src = gif;
+        return img;
+      }
+
+      const img = createIcon(gif);
+      placeholder.remove();
+      icon.append(img);
+    });
+  },
+  async formHandler(cityName) {
+    const weather = await data.getForecast(cityName);
+    console.log(weather);
+
+    // Display skeleton
+    this.displayForecast(weather);
+
+    // Insert images to skeleton
+    this.displayGifs();
   },
   displayLoading() {
     // Update your UI to display a loading state, e.g., show a spinner or a message

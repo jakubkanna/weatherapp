@@ -1,13 +1,12 @@
-export default async function modifyForecastData(data, fetcher) {
+export default function modifyForecastData(data) {
   let newData = { ...data }; // Create a shallow copy of the data to avoid modifying the original
   const days = newData.forecast.forecastday;
 
-  const conditions = findAllConditions(newData);
-
   modifyEpoch(days);
-  await modifyImage(conditions, fetcher);
 
-  console.log("modifyForecastData done");
+  const conditions = findAllObjects(newData);
+  modifyConditions(conditions);
+
   return newData;
 }
 
@@ -26,21 +25,13 @@ function modifyEpoch(days) {
     day.date_epoch = dayName;
   });
 }
-
-async function modifyImage(conditions, fetcher) {
+function modifyConditions(conditions) {
   for (const condition of conditions) {
-    const query = condition.text;
-    const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query} weather'`;
-
-    const giphyData = await fetcher.getData(url);
-
-    const giphyURL = giphyData.data.images.fixed_height.url;
-    condition.icon = giphyURL;
+    condition.icon = { placeholder: "Loading..." };
   }
-  console.log("modifyImage done");
 }
 
-function findAllConditions(obj) {
+function findAllObjects(obj) {
   let conditions = [];
 
   for (const key in obj) {
@@ -48,7 +39,7 @@ function findAllConditions(obj) {
       if (key === "condition" && obj[key] instanceof Object) {
         conditions.push(obj[key]);
       } else if (obj[key] instanceof Object) {
-        conditions = conditions.concat(findAllConditions(obj[key])); // If the property value is another object, it recursively calls itself to explore nested properties.
+        conditions = conditions.concat(findAllObjects(obj[key])); // If the property value is another object, it recursively calls itself to explore nested properties.
       }
     }
   }
