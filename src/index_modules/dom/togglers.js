@@ -46,7 +46,7 @@ class DataToggler {
     // "#astro, #moonset, #moonset *",
     "#moon_phase, #moon_phase *",
     ".immune",
-    "#date_epoch, #date_epoch *",
+    "#date_epoch, #date_epoch *:not(h5)",
     '[id*="feelslike"]:not([id*="feelslike_f"]), [id*="feelslike"] > *',
   ];
 

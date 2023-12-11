@@ -79,7 +79,7 @@ export const dataModule = {
     try {
       const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query} weather'`;
       const giphyData = await dataModule.fetcher.getData(url);
-      return giphyData.data.images.fixed_height.url;
+      return giphyData.data.images.original.url;
     } catch (error) {
       console.error(error);
     }

@@ -76,59 +76,66 @@ body {
   min-height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  padding: 12px;
 }
 header {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 12px;
-  align-items: center;
-  z-index: 2;
-}
-header > div {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  justify-content: center;
+  padding: 12px;
 }
-footer {
+nav {
   position: fixed;
   bottom: 0;
-  z-index: 2;
+  left: 50%;
+  translate: -50%;
+  padding-bottom: 12px;
+  text-align: center;
+  z-index: 999;
+}
+nav > div {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
 #root {
   width: 100%;
+  padding: 24px;
+  margin-top: 12px;
 }
 /* layout */
 #root {
   display: grid;
-  gap: 12 px;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(calc((100% - 24px) / (3 - 1)), 1fr)
-  );
-  /* 992px is a breakpoint, -1 because last element takes space of all columns */
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, calc((100% - 24px) / (3 - 1)));
 }
 #root > :nth-child(3) {
   grid-column: 1 / -1;
 }
-
+#root > * > *:not(:first-child) {
+  padding: 12px;
+}
+#root > * {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, calc((100% / 3)));
+  grid-template-rows: auto 1fr;
+}
+#root > * > *:first-child {
+  grid-column: 1/-1;
+}
 #forecastday {
   display: grid;
-  gap: 24px;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(calc((992px - 24px * 6) / 7), 1fr)
-      /* 6 is number of gaps, 7 is number of days */
-  );
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, calc((100% - (12px * 6)) / 7));
+  grid-column: 1/-1;
 }
+
 /* borders */
 
-#forecastday > * {
+/* #forecastday > * {
   border: 1px solid gray;
   padding: 6px;
-}
+} */
 
 /* outher */
 
@@ -148,4 +155,9 @@ footer {
 #date {
   font-style: italic;
   font-size: 9px;
+}
+#date_epoch {
+  font-weight: 800;
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
