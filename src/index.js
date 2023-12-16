@@ -1,4 +1,5 @@
 // domModule.js
+import "./style.css";
 import { BasicToggler, DataToggler } from "./index_modules/dom/togglers.js";
 import { HomeGen } from "./index_modules/dom/home-generator.js";
 
@@ -30,7 +31,7 @@ export const domModule = {
   },
   createGIFs: function () {
     this.conditionEls.forEach(async function (element) {
-      const text = element.querySelector("#text").innerHTML.toString();
+      const text = element.querySelector("#text>span").innerHTML.toString();
       const src = await controller.handleGif(text);
       const icon = element.querySelector("#icon");
       const placeholder = element.querySelector("#placeholder");
@@ -77,9 +78,10 @@ export const dataModule = {
   // Get Giphy data
   getGif: async function (query) {
     try {
-      const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query} weather'`;
+      const url = `https://api.giphy.com/v1/gifs/translate?api_key=t9evMNjWyyMw8FgM8GfNFAG8TkuYUklE&s=${query}'`;
       const giphyData = await dataModule.fetcher.getData(url);
-      return giphyData.data.images.original.url;
+      console.log(giphyData);
+      return giphyData.data.images.fixed_height.url;
     } catch (error) {
       console.error(error);
     }
@@ -122,7 +124,6 @@ export const controller = {
 };
 
 // main.js
-import "./style.css";
 
 document.addEventListener("DOMContentLoaded", function () {
   controller.init();
