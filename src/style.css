@@ -126,7 +126,7 @@ nav div {
 #forecastday {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, calc((100% - (12px * 6)) / 7));
+  grid-template-columns: repeat(auto-fit, calc((100% - (12px * 2)) / 3));
   grid-column: 1/-1;
 }
 
